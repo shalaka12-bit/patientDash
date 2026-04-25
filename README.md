@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MedAlert - Patient Emergency Dashboard
 
 A comprehensive Flutter app for emergency healthcare management built from your handwritten notes.
@@ -199,3 +200,6 @@ This is the **Patient Dashboard**. The Admin Panel (separate app/web) handles:
 - Accept/Reject Appointments
 - Admit/Discharge patients with date & time
 - These updates reflect in the patient's Admission Status tab
+=======
+# patientDash
+>>>>>>> 7c90c9f28af8f4408eb82dd06ebe5473556525fe
