@@ -1,0 +1,43 @@
+// firestore.rules
+// Deploy with: firebase deploy --only firestore:rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users can read/write only their own profile
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Emergency reports: patient can create & read their own
+    match /emergency_reports/{reportId} {
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+      allow read: if request.auth != null
+        && (resource.data.userId == request.auth.uid
+            || request.auth.token.admin == true);
+      // Only admin can update status
+      allow update: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // Appointments: patient creates, admin reads/updates
+    match /appointments/{apptId} {
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+      allow read: if request.auth != null
+        && (resource.data.userId == request.auth.uid
+            || request.auth.token.admin == true);
+      allow update: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    // Hospitals: anyone logged in can read; only admin writes
+    match /hospitals/{hospitalId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.auth.token.admin == true;
+    }
+  }
+}
